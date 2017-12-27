@@ -20,8 +20,7 @@
   ],
   "author": "Varuna Jayasiri",
   "license": "MIT",
-  "dependencies": {
-  },
+  "dependencies": {},
   "bugs": {
     "url": "https://github.com/vpj/weya/issues"
   },

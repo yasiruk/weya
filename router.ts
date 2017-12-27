@@ -108,7 +108,7 @@ export class Router {
 
   _extractParameters(route, fragment) {
     let params = route.exec(fragment).slice(1);
-    let results = [];
+    let results: string[] = [];
     for (let p of params) {
       if (p != null)
         results.push(decodeURIComponent(p))
@@ -135,10 +135,10 @@ interface State {
   state: any
 }
 
-interface ErrorCallback {
+export interface ErrorCallback {
   (e: any): void
 }
-interface RouterOptions {
+export interface RouterOptions {
   emulateState: boolean
   hashChange: boolean
   pushState: boolean
