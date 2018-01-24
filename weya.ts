@@ -227,11 +227,16 @@ let WEYA_DOM = domAPICreate()
 
 export interface WeyaOptions {
   context: any,
-  elem: HTMLElement
+  elem: HTMLElement,
+  document?: Document
 }
 
 export let Weya = function (options: WeyaOptions, func: WeyaTemplateFunction)
   : HTMLElement | undefined{
+  let backupDoc = API.document
+  if (options.document != null) {
+    API.document = options.document;
+  }
   let weya = WEYA_DOM
   let pContext = weya.context;
   weya.context = options.context;
@@ -240,6 +245,10 @@ export let Weya = function (options: WeyaOptions, func: WeyaTemplateFunction)
   let res = func.call(weya.context, weya)
   weya._elem = pElem;
   weya.context = pContext;
+
+  if (options.document != null) {
+    API.document = backupDoc;
+  }
   return res
 }
 
