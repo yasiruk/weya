@@ -4,9 +4,16 @@ const TAGS = {
   html: "a abbr address article aside audio b bdi bdo blockquote body button canvas caption cite code colgroup datalist dd del details dfn div dl dt em fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup html i iframe ins kbd label legend li main map mark menu meter nav noscript object ol optgroup option output p pre progress q rp rt ruby s samp script section select small span strong style sub summary sup table tbody td textarea tfoot th thead time title tr u ul video",
   htmlVoid: "area base br col command embed hr img input keygen link meta param source track wbr"
 };
-
+let doc = undefined;
+let WEYA_DOM: any = null;
+if (typeof module !== 'undefined' && module.exports) {
+  doc = undefined
+} else {
+  doc = document
+  WEYA_DOM = domAPICreate()
+}
 const API = {
-  document: document
+  document: doc as Document
 };
 
 export type WeyaTemplateFunction = ($: WeyaHelper) => HTMLElement | void
@@ -223,8 +230,6 @@ function domAPICreate() {
   return weya
 }
 
-let WEYA_DOM = domAPICreate()
-
 export interface WeyaOptions {
   context: any,
   elem: HTMLElement,
@@ -233,9 +238,13 @@ export interface WeyaOptions {
 
 export let Weya = function (options: WeyaOptions, func: WeyaTemplateFunction)
   : HTMLElement | undefined{
+
   let backupDoc = API.document
   if (options.document != null) {
     API.document = options.document;
+  }
+  if (WEYA_DOM == null) {
+    WEYA_DOM =  domAPICreate()
   }
   let weya = WEYA_DOM
   let pContext = weya.context;
