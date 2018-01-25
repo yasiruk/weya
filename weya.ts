@@ -6,11 +6,11 @@ const TAGS = {
 };
 let doc = undefined;
 let WEYA_DOM: any = null;
-if (typeof module !== 'undefined' && module.exports) {
-  doc = undefined
-} else {
+if (typeof window !== 'undefined' && window.document) {
   doc = document
   WEYA_DOM = domAPICreate()
+} else {
+  doc = undefined
 }
 const API = {
   document: doc as Document
