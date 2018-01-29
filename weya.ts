@@ -5,9 +5,14 @@ const TAGS = {
   htmlVoid: "area base br col command embed hr img input keygen link meta param source track wbr"
 };
 
+let WEYA_DOM: any = undefined;
 const API = {
-  document: document
+  document: undefined as any
 };
+if (typeof window !== 'undefined' && window.document) {
+  API.document = document
+  WEYA_DOM = domAPICreate()
+}
 
 export type WeyaTemplateFunction = ($: WeyaHelper) => HTMLElement | void
 export type WeyaElementArg = (string | AttributesInterface | WeyaTemplateFunction)
@@ -223,15 +228,22 @@ function domAPICreate() {
   return weya
 }
 
-let WEYA_DOM = domAPICreate()
-
 export interface WeyaOptions {
   context: any,
-  elem: HTMLElement
+  elem: HTMLElement,
+  document?: Document
 }
 
 export let Weya = function (options: WeyaOptions, func: WeyaTemplateFunction)
   : HTMLElement | undefined{
+
+  let backupDoc = API.document
+  if (options.document != null) {
+    API.document = options.document;
+  }
+  if (WEYA_DOM == null) {
+    WEYA_DOM =  domAPICreate()
+  }
   let weya = WEYA_DOM
   let pContext = weya.context;
   weya.context = options.context;
@@ -240,6 +252,10 @@ export let Weya = function (options: WeyaOptions, func: WeyaTemplateFunction)
   let res = func.call(weya.context, weya)
   weya._elem = pElem;
   weya.context = pContext;
+
+  if (options.document != null) {
+    API.document = backupDoc;
+  }
   return res
 }
 
